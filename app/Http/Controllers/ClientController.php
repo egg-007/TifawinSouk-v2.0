@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Utilisateur;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class ClientController extends Controller
 {
@@ -62,5 +63,42 @@ class ClientController extends Controller
         }
 
         return response()->json($client);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $client = Utilisateur::findOrFail($id);
+        
+        if ($client->role->nom !== 'client') {
+            return response()->json(['message' => 'Ce n\'est pas un client'], 404);
+        }
+
+        $request->validate([
+            'nom' => 'sometimes|required|string|max:255',
+            'prenom' => 'sometimes|required|string|max:255',
+            'email' => [
+                'sometimes',
+                'required',
+                'string',
+                'email','max:255',
+                Rule::unique('utilisateurs')->ignore($client->id),
+            ],
+            'password' => 'sometimes|required|string|min:8|confirmed',
+            'telephone' => 'nullable|string|max:20',
+            'adresse' => 'nullable|string|max:255',
+        ]);
+
+        $updateData = $request->only(['nom', 'prenom', 'email', 'telephone', 'adresse']);
+        
+        if ($request->filled('password')) {
+            $updateData['password'] = Hash::make($request->password);
+        }
+
+        $client->update($updateData);
+
+        return response()->json($client->load('role'));
     }
 }
