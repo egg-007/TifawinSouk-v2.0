@@ -101,4 +101,20 @@ class ClientController extends Controller
 
         return response()->json($client->load('role'));
     }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $client = Utilisateur::findOrFail($id);
+        
+        if ($client->role->nom !== 'client') {
+            return response()->json(['message' => 'Ce n\'est pas un client'], 404);
+        }
+
+        $client->delete();
+
+        return response()->json(['message' => 'Client supprimé avec succès']);
+    }
 }
