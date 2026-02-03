@@ -142,4 +142,20 @@ class ClientController extends Controller
 
         return response()->json($clients);
     }
+
+    /**
+     * Get client orders
+     */
+    public function orders(string $id)
+    {
+        $client = Utilisateur::findOrFail($id);
+        
+        if ($client->role->nom !== 'client') {
+            return response()->json(['message' => 'Ce n\'est pas un client'], 404);
+        }
+
+        $orders = $client->commandes()->with('lignesCommande.produit')->paginate(10);
+        
+        return response()->json($orders);
+    }
 }
