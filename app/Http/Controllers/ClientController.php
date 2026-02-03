@@ -49,4 +49,18 @@ class ClientController extends Controller
 
         return response()->json($client->load('role'), 201);
     }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $client = Utilisateur::with('role', 'commandes')->findOrFail($id);
+        
+        if ($client->role->nom !== 'client') {
+            return response()->json(['message' => 'Ce n\'est pas un client'], 404);
+        }
+
+        return response()->json($client);
+    }
 }
