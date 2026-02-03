@@ -117,4 +117,29 @@ class ClientController extends Controller
 
         return response()->json(['message' => 'Client supprimé avec succès']);
     }
+
+    /**
+     * Search clients by name or email
+     */
+    public function search(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string|min:2'
+        ]);
+
+        $query = $request->query;
+        
+        $clients = Utilisateur::with('role')
+            ->whereHas('role', function($q) {
+                $q->where('nom', 'client');
+            })
+            ->where(function($q) use ($query) {
+                $q->where('nom', 'like', "%{$query}%")
+                  ->orWhere('prenom', 'like', "%{$query}%")
+                  ->orWhere('email', 'like', "%{$query}%");
+            })
+            ->paginate(10);
+
+        return response()->json($clients);
+    }
 }
