@@ -30,8 +30,8 @@ class LigneCommandFactory extends Factory
         $prixUnitaire = $this->faker->randomFloat(2, 10, 500);
         
         return [
-            'commande_id' => Command::factory(),
-            'produit_id' => Produit::factory(),
+            'commande_id' => Command::inRandomOrder()->first()->id,
+            'produit_id' => Produit::inRandomOrder()->first()->id,
             'quantite' => $quantite,
             'prix_unitaire' => $prixUnitaire,
             'prix_total' => $quantite * $prixUnitaire,

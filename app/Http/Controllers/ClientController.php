@@ -10,21 +10,25 @@ use Illuminate\Validation\Rule;
 
 class ClientController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    private function getClientRole()
     {
-        $clients = Utilisateur::with('role')->whereHas('role', function($query) {
-            $query->where('nom', 'client');
-        })->paginate(10);
-        
-        return response()->json($clients);
+        return Role::where('nom', 'client')->firstOrFail();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function index()
+    {
+        $clients = Utilisateur::with('role')
+            ->whereHas('role', fn($query) => $query->where('nom', 'client'))
+            ->paginate(10);
+        
+        return view('clients.index', compact('clients'));
+    }
+
+    public function create()
+    {
+        return view('clients.create');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -35,127 +39,87 @@ class ClientController extends Controller
             'telephone' => 'nullable|string|max:20',
             'adresse' => 'nullable|string|max:255',
         ]);
-
-        $clientRole = Role::where('nom', 'client')->first();
         
-        $client = Utilisateur::create([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'telephone' => $request->telephone,
-            'adresse' => $request->adresse,
-            'role_id' => $clientRole->id,
-        ]);
+        $data = $request->only(['nom', 'prenom', 'email', 'telephone', 'adresse']);
+        $data['password'] = Hash::make($request->password);
+        
+        Utilisateur::create(array_merge(
+            $data,
+            ['role_id' => $this->getClientRole()->id]
+        ));
 
-        return response()->json($client->load('role'), 201);
+        return redirect()->route('clients.index')
+            ->with('success', 'Client créé avec succès!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $client = Utilisateur::with('role', 'commandes')->findOrFail($id);
         
         if ($client->role->nom !== 'client') {
-            return response()->json(['message' => 'Ce n\'est pas un client'], 404);
+            abort(404);
         }
 
-        return response()->json($client);
+        return view('clients.show', compact('client'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    public function edit(string $id)
+    {
+        $client = Utilisateur::findOrFail($id);
+        
+        if ($client->role->nom !== 'client') {
+            abort(404);
+        }
+
+        return view('clients.edit', compact('client'));
+    }
+
     public function update(Request $request, string $id)
     {
         $client = Utilisateur::findOrFail($id);
         
         if ($client->role->nom !== 'client') {
-            return response()->json(['message' => 'Ce n\'est pas un client'], 404);
+            abort(404);
         }
 
         $request->validate([
-            'nom' => 'sometimes|required|string|max:255',
-            'prenom' => 'sometimes|required|string|max:255',
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
             'email' => [
-                'sometimes',
                 'required',
                 'string',
-                'email','max:255',
+                'email',
+                'max:255',
                 Rule::unique('utilisateurs')->ignore($client->id),
             ],
-            'password' => 'sometimes|required|string|min:8|confirmed',
             'telephone' => 'nullable|string|max:20',
             'adresse' => 'nullable|string|max:255',
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
-
-        $updateData = $request->only(['nom', 'prenom', 'email', 'telephone', 'adresse']);
+        
+        $data = $request->only(['nom', 'prenom', 'email', 'telephone', 'adresse']);
         
         if ($request->filled('password')) {
-            $updateData['password'] = Hash::make($request->password);
+            $data['password'] = Hash::make($request->password);
         }
+        
+        $client->update($data);
 
-        $client->update($updateData);
-
-        return response()->json($client->load('role'));
+        return redirect()->route('clients.show', $client->id)
+            ->with('success', 'Client mis à jour avec succès!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $client = Utilisateur::findOrFail($id);
         
         if ($client->role->nom !== 'client') {
-            return response()->json(['message' => 'Ce n\'est pas un client'], 404);
+            abort(404);
         }
 
         $client->delete();
 
-        return response()->json(['message' => 'Client supprimé avec succès']);
-    }
-
-    /**
-     * Search clients by name or email
-     */
-    public function search(Request $request)
-    {
-        $request->validate([
-            'query' => 'required|string|min:2'
-        ]);
-
-        $query = $request->query;
-        
-        $clients = Utilisateur::with('role')
-            ->whereHas('role', function($q) {
-                $q->where('nom', 'client');
-            })
-            ->where(function($q) use ($query) {
-                $q->where('nom', 'like', "%{$query}%")
-                  ->orWhere('prenom', 'like', "%{$query}%")
-                  ->orWhere('email', 'like', "%{$query}%");
-            })
-            ->paginate(10);
-
-        return response()->json($clients);
-    }
-
-    /**
-     * Get client orders
-     */
-    public function orders(string $id)
-    {
-        $client = Utilisateur::findOrFail($id);
-        
-        if ($client->role->nom !== 'client') {
-            return response()->json(['message' => 'Ce n\'est pas un client'], 404);
-        }
-
-        $orders = $client->commandes()->with('lignesCommande.produit')->paginate(10);
-        
-        return response()->json($orders);
+        return redirect()->route('clients.index')
+            ->with('success', 'Client supprimé avec succès!');
     }
 }

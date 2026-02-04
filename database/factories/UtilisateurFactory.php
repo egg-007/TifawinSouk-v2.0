@@ -33,7 +33,7 @@ class UtilisateurFactory extends Factory
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'telephone' => $this->faker->phoneNumber(),
             'adresse' => $this->faker->streetAddress(),
-            'role_id' => Role::factory(),
+            'role_id' => Role::where('nom', 'client')->inRandomOrder()->first()->id,
             'remember_token' => \Illuminate\Support\Str::random(10),
         ];
     }
