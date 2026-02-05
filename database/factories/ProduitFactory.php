@@ -33,6 +33,7 @@ class ProduitFactory extends Factory
             'quantite_stock' => $this->faker->numberBetween(1, 500),
             'image' => $this->faker->imageUrl(400, 400, 'products'),
             'fournisseur_id' => Fornisseur::inRandomOrder()->first()->id,
+            'categorie_id' => \App\Models\Categorie::inRandomOrder()->first()->id,
             'statut' => $this->faker->randomElement(['actif', 'inactif']),
         ];
     }
