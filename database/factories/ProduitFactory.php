@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Categorie;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Produit;
 use App\Models\Fornisseur;
@@ -32,8 +33,9 @@ class ProduitFactory extends Factory
             'prix' => $this->faker->randomFloat(2, 10, 1000),
             'quantite_stock' => $this->faker->numberBetween(1, 500),
             'image' => $this->faker->imageUrl(400, 400, 'products'),
-            'fournisseur_id' => Fornisseur::inRandomOrder()->first()->id,
+            'fournisseur_id' => Fornisseur::factory(),
             'statut' => $this->faker->randomElement(['actif', 'inactif']),
+            'categorie_id' => Categorie::factory(),
         ];
     }
 }

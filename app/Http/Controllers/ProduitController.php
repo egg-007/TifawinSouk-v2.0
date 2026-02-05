@@ -37,6 +37,7 @@ class ProduitController extends Controller
             'quantite_stock' => 'required|numeric|min:0',
             'image' => 'nullable|image|mimes:jpg,png',
             'fournisseur_id' => 'required|numeric|min:0',
+            'categorie_id' => 'required|numeric|min:0',
             'statut' => 'nullable|string |max:100',
         ]);
 
