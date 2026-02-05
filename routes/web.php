@@ -7,4 +7,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::apiResource('categories', CategorieController::class);
+Route::Resource('categories', CategorieController::class);
