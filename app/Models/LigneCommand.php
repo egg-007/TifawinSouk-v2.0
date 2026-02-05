@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class LigneCommand extends Model
 {
+    use HasFactory;
+    
+    protected $table = 'lignes_commande';
+    
     protected $fillable = [
         'commande_id', 'produit_id', 'quantite', 'prix_unitaire', 'prix_total'
     ];

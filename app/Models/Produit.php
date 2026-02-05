@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Produit extends Model
 {
+    use HasFactory;
+    
+    protected $table = 'produits';
+    
     protected $fillable = [
-        'reference', 'nom', 'description', 'prix', 'quantite_stock', 'image', 'fournisseur_id', 'statut'
+        'categorie_id','reference', 'nom', 'description', 'prix', 'quantite_stock', 'image', 'fournisseur_id', 'statut'
     ];
 
     public function fournisseur()
