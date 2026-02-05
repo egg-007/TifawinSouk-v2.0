@@ -12,7 +12,7 @@ class Produit extends Model
     protected $table = 'produits';
     
     protected $fillable = [
-        'reference', 'nom', 'description', 'prix', 'quantite_stock', 'image', 'fournisseur_id', 'statut'
+        'categorie_id','reference', 'nom', 'description', 'prix', 'quantite_stock', 'image', 'fournisseur_id', 'statut'
     ];
 
     public function fournisseur()

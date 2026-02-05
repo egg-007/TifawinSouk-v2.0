@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->unsignedBigInteger('fournisseur_id');
             $table->foreign('fournisseur_id')->references('id')->on('fournisseurs')->onDelete('cascade');
+            $table->unsignedBigInteger( 'categorie_id');
+            $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
             $table->enum('statut', ['actif', 'inactif'])->default('actif');
             $table->timestamps();
         });
