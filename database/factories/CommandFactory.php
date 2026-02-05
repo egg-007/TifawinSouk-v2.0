@@ -30,7 +30,9 @@ class CommandFactory extends Factory
             'date_commande' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'montant_total' => $this->faker->randomFloat(2, 50, 5000),
             'statut' => $this->faker->randomElement(['en_attente', 'confirmee', 'expediee', 'livree', 'annulee']),
-            'utilisateur_id' => Utilisateur::factory(),
+            'utilisateur_id' => Utilisateur::whereHas('role', function($query) {
+                $query->where('nom', 'client');
+            })->inRandomOrder()->first()->id,
             'notes' => $this->faker->sentence(5),
         ];
     }
