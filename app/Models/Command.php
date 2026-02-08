@@ -25,8 +25,8 @@ class Command extends Model
         return $this->belongsTo(Utilisateur::class);
     }
 
-    public function lignesCommande()
+    public function lignes()
     {
-        return $this->hasMany(LigneCommand::class);
+        return $this->hasMany(LigneCommand::class, 'commande_id');
     }
 }
