@@ -24,4 +24,5 @@ class Produit extends Model
     {
         return $this->hasMany(LigneCommand::class);
     }
+    
 }

@@ -19,4 +19,5 @@ class Fornisseur extends Model
     {
         return $this->hasMany(Produit::class);
     }
+    
 }
