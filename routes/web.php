@@ -1,13 +1,15 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SignupController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\AuthController;
-
-
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -46,12 +48,12 @@ Route::put('/Admin/categories/{id}', [CategorieController::class, 'update'])->na
 Route::delete('/Admin/categories/{id}', [CategorieController::class, 'destroy'])->name('categories.destroy');
 
 Route::middleware(['guest'])->group(function() {
-    Route::get('/login', [AuthController::class, 'login'])->name('login');
-    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::get('/login', [LoginController::class, 'login'])->name('login');
+    Route::get('/register', [SignupController::class, 'register'])->name('register');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function() {
-    Route::get('/Admin/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/Admin/dashboard', [AdminController::class, 'index'])->name('dashboard');
 });
 
 // Routes pour les produits - ADMIN CRUD
