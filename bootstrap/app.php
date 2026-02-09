@@ -16,3 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
+$app->routeMiddleware([
+    'auth' => \App\Http\Middleware\AuthMiddleware::class,
+    'role' => \App\Http\Middleware\RoleMiddleware::class,
+    'guest' => \App\Http\Middleware\GuestMiddleware::class,
+]);
