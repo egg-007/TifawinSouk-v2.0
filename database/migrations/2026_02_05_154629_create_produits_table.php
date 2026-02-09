@@ -19,9 +19,9 @@ return new class extends Migration
             $table->decimal('prix', 10, 2);
             $table->integer('quantite_stock');
             $table->string('image')->nullable();
-            $table->unsignedBigInteger('fournisseur_id');
+            $table->unsignedBigInteger('fournisseur_id')->nullable();
             $table->foreign('fournisseur_id')->references('id')->on('fournisseurs')->onDelete('cascade');
-            $table->unsignedBigInteger( 'categorie_id');
+            $table->unsignedBigInteger( 'categorie_id')->nullable();
             $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
             $table->enum('statut', ['actif', 'inactif'])->default('actif');
             $table->timestamps();
