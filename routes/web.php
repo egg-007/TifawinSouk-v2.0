@@ -1,13 +1,15 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SignupController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\AuthController;
-
-
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -45,36 +47,15 @@ Route::get('/Admin/categories/{id}/edit', [CategorieController::class, 'edit'])-
 Route::put('/Admin/categories/{id}', [CategorieController::class, 'update'])->name('categories.update');
 Route::delete('/Admin/categories/{id}', [CategorieController::class, 'destroy'])->name('categories.destroy');
 
-<<<<<<< HEAD
 Route::middleware(['guest'])->group(function() {
-    Route::get('/login', [AuthController::class, 'login'])->name('login');
-    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::get('/login', [LoginController::class, 'login'])->name('login');
+    Route::get('/register', [SignupController::class, 'Signup'])->name('register');
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function() {
-    Route::get('/Admin/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/Admin/dashboard', [AdminController::class, 'index'])->name('dashboard');
 });
 
-// Routes pour les produit - CRUD essentiel uniquement
-
-Route::get('/Admin/produit', [ClientController::class, 'index'])->name('produit.index');
-Route::get('/Admin/produit/create', [ClientController::class, 'create'])->name('produit.create');
-Route::post('/Admin/produit', [ClientController::class, 'store'])->name('produit.store');
-Route::get('/Admin/produit/{id}', [ClientController::class, 'show'])->name('produit.show');
-Route::get('/Admin/produit/{id}/edit', [ClientController::class, 'edit'])->name('produit.edit');
-Route::put('/Admin/produit/{id}', [ClientController::class, 'update'])->name('produit.update');
-Route::delete('/Admin/produit/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');
-
-// Routes pour les fornisseur - CRUD essentiel uniquement
-
-Route::get('/Admin/fornisseur', [ClientController::class, 'index'])->name('fornisseur.index');
-Route::get('/Admin/fornisseur/create', [ClientController::class, 'create'])->name('fornisseur.create');
-Route::post('/Admin/fornisseur', [ClientController::class, 'store'])->name('fornisseur.store');
-Route::get('/Admin/fornisseur/{id}', [ClientController::class, 'show'])->name('fornisseur.show');
-Route::get('/Admin/fornisseur/{id}/edit', [ClientController::class, 'edit'])->name('fornisseur.edit');
-Route::put('/Admin/fornisseur/{id}', [ClientController::class, 'update'])->name('fornisseur.update');
-Route::delete('/Admin/fornisseur/{id}', [ClientController::class, 'destroy'])->name('fornisseur.destroy');
-=======
 // Routes pour les produits - ADMIN CRUD
 Route::get('/Admin/produits', [ProduitController::class, 'index'])->name('produits.index');
 Route::get('/Admin/produits/create', [ProduitController::class, 'create'])->name('produits.create');
@@ -83,4 +64,3 @@ Route::get('/Admin/produits/{id}', [ProduitController::class, 'show'])->name('pr
 Route::get('/Admin/produits/{id}/edit', [ProduitController::class, 'edit'])->name('produits.edit');
 Route::put('/Admin/produits/{id}', [ProduitController::class, 'update'])->name('produits.update');
 Route::delete('/Admin/produits/{id}', [ProduitController::class, 'destroy'])->name('produits.destroy');
->>>>>>> 64b5f5b124f4d32959c1ce9403e691dc8ce98ea1
