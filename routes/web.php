@@ -5,21 +5,34 @@ use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Route de test pour vérifier si Laravel lit ce fichier
-Route::get('/test-routes', function () {
-    return 'Routes are loaded! Shop routes should work.';
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+require __DIR__ . '/auth.php';
 
 use App\Http\Controllers\Admin\DashboardController;
 
 Route::get('/Admin/dashboard', [DashboardController::class, 'index'])
     ->name('admin.dashboard');
+
+// Routes SHOP - CLIENT (pour acheter) - PLACÉES EN PREMIER
+Route::get('/shop/produits', [ProduitController::class, 'shop'])->name('shop.produits');
+Route::post('/commande/ajouter', [CommandeController::class, 'ajouterProduit'])->name('commande.ajouter');
+Route::get('/shop/panier', [CommandeController::class, 'panier'])->name('shop.panier');
+
 
 // Routes pour les clients - CRUD essentiel uniquement
 Route::get('/Admin/clients', [ClientController::class, 'index'])->name('clients.index');
