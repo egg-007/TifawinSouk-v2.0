@@ -16,6 +16,10 @@ Route::get('/test-routes', function () {
 });
 
 
+use App\Http\Controllers\Admin\DashboardController;
+
+Route::get('/Admin/dashboard', [DashboardController::class, 'index'])
+    ->name('admin.dashboard');
 
 // Routes pour les clients - CRUD essentiel uniquement
 Route::get('/Admin/clients', [ClientController::class, 'index'])->name('clients.index');
