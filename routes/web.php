@@ -23,10 +23,16 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
+use App\Http\Controllers\Admin\DashboardController;
+
+Route::get('/Admin/dashboard', [DashboardController::class, 'index'])
+    ->name('admin.dashboard');
+
 // Routes SHOP - CLIENT (pour acheter) - PLACÉES EN PREMIER
 Route::get('/shop/produits', [ProduitController::class, 'shop'])->name('shop.produits');
 Route::post('/commande/ajouter', [CommandeController::class, 'ajouterProduit'])->name('commande.ajouter');
 Route::get('/shop/panier', [CommandeController::class, 'panier'])->name('shop.panier');
+
 
 // Routes pour les clients - CRUD essentiel uniquement
 Route::get('/Admin/clients', [ClientController::class, 'index'])->name('clients.index');
