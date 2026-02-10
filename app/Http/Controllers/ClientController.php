@@ -17,9 +17,7 @@ class ClientController extends Controller
 
     public function index()
     {
-        $clients = Utilisateur::with('role')
-            ->whereHas('role', fn($query) => $query->where('nom', 'client'))
-            ->paginate(10);
+        $clients = Utilisateur::paginate(10);
         
         return view('clients.index', compact('clients'));
     }
@@ -78,9 +76,7 @@ class ClientController extends Controller
     {
         $client = Utilisateur::findOrFail($id);
         
-        if ($client->role->nom !== 'client') {
-            abort(404);
-        }
+      
 
         $request->validate([
             'nom' => 'required|string|max:255',
@@ -90,7 +86,7 @@ class ClientController extends Controller
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('utilisateurs')->ignore($client->id),
+                // Rule::unique('utilisateurs')->ignore($client->id),
             ],
             'telephone' => 'nullable|string|max:20',
             'adresse' => 'nullable|string|max:255',

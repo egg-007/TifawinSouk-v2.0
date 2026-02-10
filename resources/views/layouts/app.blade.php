@@ -23,6 +23,21 @@
                             <i class="bi bi-people"></i> Clients
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('produits.*') ? 'active' : '' }}" href="/Admin/produits">
+                            <i class="bi bi-box"></i> Produits Admin
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('shop.*') ? 'active' : '' }}" href="/shop/produits">
+                            <i class="bi bi-shop"></i> Boutique
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('shop.*') ? 'active' : '' }}" href="{{ route('shop.panier') }}">
+                            <i class="bi bi-cart3"></i> Panier
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
