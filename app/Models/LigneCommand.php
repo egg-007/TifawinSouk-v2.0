@@ -29,4 +29,5 @@ class LigneCommand extends Model
     {
         return $this->belongsTo(Produit::class);
     }
+    
 }

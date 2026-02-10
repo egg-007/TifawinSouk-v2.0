@@ -29,4 +29,5 @@ class Command extends Model
     {
         return $this->hasMany(LigneCommand::class, 'commande_id');
     }
+    
 }
