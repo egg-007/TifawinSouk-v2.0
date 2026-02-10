@@ -38,6 +38,16 @@ class ProfileController extends Controller
     }
 
     /**
+     * Display the client's profile form.
+     */
+    public function clientProfile(Request $request): View
+    {
+        return view('client.profile', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
      * Delete the user's account.
      */
     public function destroy(Request $request): RedirectResponse

@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Boutique - Nos Produits')
 
-@section('content')
+@section('main_content')
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2><i class="bi bi-shop"></i> Boutique - Nos Produits</h2>

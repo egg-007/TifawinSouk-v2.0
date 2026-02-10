@@ -153,20 +153,6 @@ return [
                 ],
             ],
         ],
-
-        ['header' => 'BOUTIQUE'],
-
-        // ===== SHOP =====
-        [
-            'text' => 'Boutique',
-            'route' => 'shop.produits',
-            'icon' => 'fas fa-fw fa-store',
-        ],
-        [
-            'text' => 'Panier',
-            'route' => 'shop.panier',
-            'icon' => 'fas fa-fw fa-shopping-cart',
-        ],
     ],
 
     /*

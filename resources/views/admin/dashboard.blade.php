@@ -69,7 +69,7 @@
             <div class="icon">
                 <i class="fas fa-shopping-cart"></i>
             </div>
-            <a href="{{ route('shop.panier') }}" class="small-box-footer">
+            <a href="{{ route('commandes.index') }}" class="small-box-footer">
                 Voir plus <i class="fas fa-arrow-circle-right"></i>
             </a>
         </div>
@@ -91,10 +91,6 @@
 
         <a href="{{ route('produits.create') }}" class="btn btn-warning mr-2">
             <i class="fas fa-box-open"></i> Ajouter produit
-        </a>
-
-        <a href="{{ route('shop.produits') }}" class="btn btn-success">
-            <i class="fas fa-store"></i> Voir boutique
         </a>
     </div>
 </div>
