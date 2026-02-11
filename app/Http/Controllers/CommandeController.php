@@ -122,7 +122,7 @@ class CommandeController extends Controller
                 ]);
             });
 
-            return redirect()->route('shop.produits')
+            return redirect()->route('client.shop.produits')
                 ->with('success', 'Commande payée avec succès! Merci pour votre achat.');
 
         } catch (\Exception $e) {
