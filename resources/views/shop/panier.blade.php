@@ -87,7 +87,7 @@
                             <h5 class="text-primary">{{ number_format($commande->montant_total, 2) }} €</h5>
                         </div>
                         
-                        <form method="POST" action="{{ route('commande.payer', $commande->id) }}">
+                        <form method="POST" action="{{ route('client.commande.payer', $commande->id) }}">
                             @csrf
                             <button type="submit" class="btn btn-success w-100">
                                 <i class="bi bi-credit-card"></i> Payer la commande
