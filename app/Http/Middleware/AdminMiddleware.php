@@ -22,24 +22,24 @@ class AdminMiddleware
             return redirect()->route('login');
         }
 
-        // Vérifier si l'utilisateur est administrateur
-        // Vous pouvez adapter cette logique selon votre système de rôles
+        // Vérifier si l'utilisateur est administrateur depuis la base de données
         $user = Auth::user();
         
-        // Option 1: Vérifier par email (pour les admins spécifiques)
-        $adminEmails = ['admin@example.com', 'superadmin@example.com']; // Ajoutez vos emails admin
+        // DEBUG: Afficher les informations de l'utilisateur
+        // dd([
+        //     'user_id' => $user->id,
+        //     'user_email' => $user->email,
+        //     'user_role' => $user->role ?? 'non défini',
+        //     'user_is_admin' => $user->is_admin ?? 'non défini',
+        //     'user_attributes' => $user->getAttributes()
+        // ]);
         
-        // Option 2: Vérifier par champ 'role' si vous l'avez dans votre table users
-        // if ($user->role !== 'admin') { ... }
-        
-        // Option 3: Vérifier par champ 'is_admin' si vous l'avez
-        // if (!$user->is_admin) { ... }
-        
-        if (!in_array($user->email, $adminEmails)) {
-            // Rediriger les non-admins vers l'espace client
-            return redirect()->route('client.shop.produits');
+        // Vérifier si l'utilisateur est administrateur (role_id = 1)
+        if ($user->role_id == 1) {
+            return $next($request);
         }
-
-        return $next($request);
+        
+        // Rediriger les non-admins vers une page d'accès refusé
+        return redirect()->route('login')->with('error', 'Accès réservé aux administrateurs');
     }
 }

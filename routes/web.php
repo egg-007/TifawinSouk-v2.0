@@ -34,8 +34,8 @@ Route::get('/admin/dashboard', [DashboardController::class, 'index'])
 //     ->middleware('auth')
 //     ->name('admin.dashboard.alt');
 
-// Routes CLIENT - Espace client protégé par auth
-Route::middleware('auth')->prefix('/client')->group(function () {
+// Routes CLIENT - Espace client protégé par auth et role:client
+Route::middleware(['auth', 'role:client'])->prefix('/client')->group(function () {
     Route::get('/shop/produits', [ProduitController::class, 'shop'])->name('client.shop.produits');
     Route::post('/commande/ajouter', [CommandeController::class, 'ajouterProduit'])->name('client.commande.ajouter');
     Route::get('/shop/panier', [CommandeController::class, 'panier'])->name('client.shop.panier');

@@ -26,16 +26,16 @@ class RoleMiddleware
 
         // Vérifier le rôle de l'utilisateur
         if ($role === 'admin' && $user->role_id != 1) {
-            // Si l'utilisateur n'est pas admin et essaie d'accéder aux routes admin
+            // Si l'utilisateur n'est pas admin (role_id != 1) et essaie d'accéder aux routes admin
             abort(403, 'Accès non autorisé - Réservé aux administrateurs');
         }
 
-        if ($role === 'client' && $user->role_id == 1) {
-            // Si l'utilisateur est admin et essaie d'accéder aux routes client
-            // On peut permettre aux admins d'accéder aussi aux routes client
-            return $next($request);
+        if ($role === 'client' && $user->role_id != 2) {
+            // Si l'utilisateur n'est pas client (role_id != 2) et essaie d'accéder aux routes client
+            abort(403, 'Accès non autorisé - Réservé aux clients');
         }
 
         return $next($request);
     }
 }
+ 
