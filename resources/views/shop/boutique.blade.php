@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.client')
 
 @section('title', 'Boutique - Nos Produits')
 
@@ -30,7 +30,7 @@
                                         <strong>Prix:</strong> {{ number_format($produit->prix, 2, ',', ' ') }} €<br>
                                         <strong>Stock:</strong> {{ $produit->quantite_stock }} disponibles
                                     </p>
-                                    <form action="{{ route('commande.ajouter') }}" method="POST" class="mt-3">
+                                    <form action="{{ route('client.commande.ajouter') }}" method="POST" class="mt-3">
                                         @csrf
                                         <input type="hidden" name="produit_id" value="{{ $produit->id }}">
                                         <div class="form-group">

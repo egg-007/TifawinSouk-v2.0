@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('content')
+@section('main_content')
 <div class="container">
     <h2>Ajouter une catégorie</h2>
 

@@ -1,8 +1,10 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Command;
 use App\Models\LigneCommand;
 use App\Models\Produit;
@@ -126,5 +128,19 @@ class CommandeController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    /**
+     * Afficher les commandes du client connecté
+     */
+    public function mesCommandes()
+    {
+        $commandes = Command::where('utilisateur_id', Auth::id())
+            ->with('produits')
+            ->with('lignes')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('commandes.mes-commandes', compact('commandes'));
     }
 }

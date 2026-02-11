@@ -1,4 +1,5 @@
-@extends('layouts.app')
+
+@extends('layouts.client')
 
 @section('title', 'Mon Panier')
 
@@ -7,7 +8,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2><i class="bi bi-cart3"></i> Mon Panier</h2>
         <div>
-            <a href="{{ route('shop.produits') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('client.shop.produits') }}" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left"></i> Continuer mes achats
             </a>
         </div>
@@ -101,7 +102,7 @@
             <i class="bi bi-cart-x" style="font-size: 4rem; color: #ccc;"></i>
             <h4 class="mt-3">Votre panier est vide</h4>
             <p class="text-muted">Ajoutez des produits pour commencer vos achats.</p>
-            <a href="{{ route('shop.produits') }}" class="btn btn-primary">
+            <a href="{{ route('client.shop.produits') }}" class="btn btn-primary">
                 <i class="bi bi-shop"></i> Voir les produits
             </a>
         </div>

@@ -29,4 +29,10 @@ class Command extends Model
     {
         return $this->hasMany(LigneCommand::class, 'commande_id');
     }
+
+    public function produits()
+    {
+        return $this->belongsToMany(Produit::class, 'lignes_commandes', 'commande_id', 'produit_id')
+                    ->withPivot('quantite', 'prix_unitaire', 'total');
+    }
 }

@@ -9,12 +9,12 @@ use Illuminate\Notifications\Notifiable;
 
 class Utilisateur extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table = 'utilisateurs';
     
     protected $fillable = [
-        'nom', 'prenom', 'email', 'password', 'telephone', 'adresse', 'role_id'
+        'nom', 'prenom', 'email', 'password', 'telephone', 'adresse', 'role_id', 'email_verified_at'
     ];
 
     protected $hidden = [
@@ -24,6 +24,14 @@ class Utilisateur extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the full name of the user.
+     */
+    public function getNameAttribute()
+    {
+        return $this->nom . ' ' . $this->prenom;
+    }
 
     public function role()
     {
