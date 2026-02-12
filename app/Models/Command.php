@@ -32,7 +32,7 @@ class Command extends Model
 
     public function produits()
     {
-        return $this->belongsToMany(Produit::class, 'lignes_commandes', 'commande_id', 'produit_id')
-                    ->withPivot('quantite', 'prix_unitaire', 'total');
+        return $this->belongsToMany(Produit::class, 'lignes_commande', 'commande_id', 'produit_id')
+                    ->withPivot('quantite', 'prix_unitaire', 'prix_total');
     }
 }
