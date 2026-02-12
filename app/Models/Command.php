@@ -25,10 +25,6 @@ class Command extends Model
         return $this->belongsTo(Utilisateur::class);
     }
 
-    public function lignes()
-    {
-        return $this->hasMany(LigneCommand::class, 'commande_id');
-    }
 
     public function produits()
     {

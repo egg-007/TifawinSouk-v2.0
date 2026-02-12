@@ -20,8 +20,9 @@ class Produit extends Model
         return $this->belongsTo(Fornisseur::class);
     }
 
-    public function lignesCommande()
+    public function Commande()
     {
-        return $this->hasMany(LigneCommand::class);
+        return $this->belongsToMany(Command::class, 'lignes_commandes', 'produit_id', 'commande_id')
+                    ->withPivot('quantite', 'prix_unitaire', 'total');
     }
 }

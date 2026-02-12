@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Command;
-use App\Models\LigneCommand;
 use App\Models\Produit;
 use Illuminate\Support\Facades\DB;
 
@@ -43,7 +42,7 @@ class CommandeController extends Controller
         );
 
         // Vérifier si le produit est déjà dans la commande
-        $ligneExistante = LigneCommand::where('commande_id', $commande->id)
+        $ligneExistante = $commande->lignes()->where('commande_id', $commande->id)
             ->where('produit_id', $produit->id)
             ->first();
 
@@ -61,7 +60,7 @@ class CommandeController extends Controller
             ]);
         } else {
             // Créer une nouvelle ligne
-            LigneCommand::create([
+            $commande->lignes()->create([
                 'commande_id' => $commande->id,
                 'produit_id' => $produit->id,
                 'quantite' => $request->quantite,
@@ -71,8 +70,8 @@ class CommandeController extends Controller
         }
 
         // Recalculer le total de la commande
-        $total = LigneCommand::where('commande_id', $commande->id)
-            ->sum('prix_total');
+        $total = $commande->lignes()->sum('prix_total');
+
         
         $commande->update(['montant_total' => $total]);
 

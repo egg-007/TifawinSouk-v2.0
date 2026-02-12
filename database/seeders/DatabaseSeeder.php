@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             FornisseurSeeder::class,
             ProduitSeeder::class,
             CommandSeeder::class,
-            LigneCommandSeeder::class,
         ]);
 
         // User::factory(10)->create();
