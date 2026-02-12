@@ -114,9 +114,8 @@
                             <div class="col-md-6 mb-3">
                                 <label for="statut" class="form-label">Statut</label>
                                 <select name="statut" class="form-control @error('statut') is-invalid @enderror">
-                                    <option value="disponible" {{ old('statut') == 'disponible' ? 'selected' : '' }}>Disponible</option>
-                                    <option value="indisponible" {{ old('statut') == 'indisponible' ? 'selected' : '' }}>Indisponible</option>
-                                    <option value="en_rupture" {{ old('statut') == 'en_rupture' ? 'selected' : '' }}>En rupture</option>
+                                    <option value="actif" {{ old('statut') == 'actif' ? 'selected' : '' }}>Actif</option>
+                                    <option value="inactif" {{ old('statut') == 'inactif' ? 'selected' : '' }}>Inactif</option>
                                 </select>
                                 @error('statut')
                                     <div class="invalid-feedback">

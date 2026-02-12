@@ -18,6 +18,13 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0">Liste des Produits</h5>
@@ -48,23 +55,32 @@
                                 <td>{{ number_format($produit->prix, 2, ',', ' ') }} €</td>
                                 <td>{{ $produit->quantite_stock }}</td>
                                 <td>
-                                    <span class="badge bg-{{ $produit->statut == 'disponible' ? 'success' : 'warning' }}">
-                                        {{ $produit->statut }}
+                                    <span class="badge bg-{{ $produit->statut == 'actif' ? 'success' : 'secondary' }}">
+                                        {{ $produit->statut == 'actif' ? 'Actif' : 'Inactif' }}
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="{{ route('produits.show', $produit->id) }}" class="btn btn-sm btn-info">
-                                            <i class="bi bi-eye"></i>
+                                    <div class="btn-group" role="group" aria-label="Actions">
+                                        <a href="{{ route('produits.show', $produit->id) }}" 
+                                           class="btn btn-sm btn-outline-primary" 
+                                           title="Voir les détails">
+                                            <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('produits.edit', $produit->id) }}" class="btn btn-sm btn-warning">
-                                            <i class="bi bi-pencil"></i>
+                                        <a href="{{ route('produits.edit', $produit->id) }}" 
+                                           class="btn btn-sm btn-outline-warning" 
+                                           title="Modifier le produit">
+                                            <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('produits.destroy', $produit->id) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('produits.destroy', $produit->id) }}" 
+                                              method="POST" 
+                                              class="d-inline">
                                             @csrf
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de supprimer ce produit ?')">
-                                                <i class="bi bi-trash"></i>
+                                            @method('DELETE')
+                                            <button type="submit" 
+                                                    class="btn btn-sm btn-outline-danger" 
+                                                    title="Supprimer le produit"
+                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.')">
+                                                <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
                                     </div>

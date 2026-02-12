@@ -30,7 +30,7 @@ class CommandeController extends Controller
 
         $commande = Command::firstOrCreate(
             [
-                'utilisateur_id' => 1, // ID utilisateur par défaut
+                'utilisateur_id' => Auth::id(),
                 'statut' => 'en_attente'
             ],
             [
@@ -39,6 +39,7 @@ class CommandeController extends Controller
                 'montant_total' => 0
             ]
         );
+
         $ligneExistante = LigneCommand::where('commande_id', $commande->id)
             ->where('produit_id', $produit->id)
             ->first();
@@ -72,12 +73,12 @@ class CommandeController extends Controller
         return back()->with('success', 'Produit ajouté au panier avec succès!');
     }
 
-    /**
-     * Afficher le panier
-     */
+
     public function panier()
     {
-        $commande = Command::where('utilisateur_id', 1)
+
+        $commande = Command::where('utilisateur_id', Auth::id())
+
             ->where('statut', 'en_attente')
             ->with('lignes.produit')
             ->first();
@@ -85,9 +86,7 @@ class CommandeController extends Controller
         return view('shop.panier', compact('commande'));
     }
 
-    /**
-     * Payer la commande
-     */
+   
     public function payer($id)
     {
         $commande = Command::with('lignes.produit')->findOrFail($id);
@@ -121,9 +120,7 @@ class CommandeController extends Controller
         }
     }
 
-    /**
-     * Afficher les commandes du client connecté
-     */
+  
     public function mesCommandes()
     {
         $commandes = Command::where('utilisateur_id', Auth::id())

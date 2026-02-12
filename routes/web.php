@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProduitController;
@@ -13,6 +14,11 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
+    $user = Auth::user();
+    if ($user && $user->role_id == 1) {
+        // Redirection directe vers le dashboard admin pour éviter le middleware client
+        return redirect('/admin/dashboard');
+    }
     return redirect()->route('client.shop.produits');
 })->middleware('auth')->name('dashboard');
 
@@ -35,8 +41,15 @@ Route::get('/admin/dashboard', [DashboardController::class, 'index'])
 //     ->name('admin.dashboard.alt');
 
 // Routes CLIENT - Espace client protégé par auth et role:client
-Route::middleware(['auth', 'role:client'])->prefix('/client')->group(function () {
-    Route::get('/shop/produits', [ProduitController::class, 'shop'])->name('client.shop.produits');
+Route::middleware(['auth'])->prefix('/client')->group(function () {
+    Route::get('/shop/produits', function () {
+        $user = Auth::user();
+        if ($user && $user->role_id == 1) {
+            return redirect('/admin/dashboard');
+        }
+        return app(\App\Http\Controllers\ProduitController::class)->shop();
+    })->name('client.shop.produits');
+    
     Route::post('/commande/ajouter', [CommandeController::class, 'ajouterProduit'])->name('client.commande.ajouter');
     Route::get('/shop/panier', [CommandeController::class, 'panier'])->name('client.shop.panier');
     Route::post('/commande/payer/{id}', [CommandeController::class, 'payer'])->name('client.commande.payer');

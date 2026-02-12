@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Utilisateur;
+use App\Models\Role;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -31,19 +32,25 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'prenom' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:utilisateurs,email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
+        // Récupérer le rôle 'client' par défaut
+        $clientRole = Role::where('nom', 'client')->first();
+        
+        $utilisateur = Utilisateur::create([
+            'nom' => $request->name,
+            'prenom' => $request->prenom ?? '',
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role_id' => $clientRole ? $clientRole->id : 2, // Rôle 'client' par défaut
         ]);
 
-        event(new Registered($user));
+        event(new Registered($utilisateur));
 
-        Auth::login($user);
+        Auth::login($utilisateur);
 
         return redirect(route('dashboard', absolute: false));
     }

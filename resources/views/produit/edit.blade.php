@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Modifier un Produit - Admin')
 
-@section('content')
+@section('main_content')
 <div class="container mx-auto">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -18,7 +18,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="nom" class="form-label">Nom du produit *</label>
-                                <input type="text" name="nom" class="form-control @error('nom', 'is-invalid')" value="{{ $produit->nom }}" required>
+                                <input type="text" name="nom" class="form-control @error('nom') is-invalid @enderror" value="{{ $produit->nom }}" required>
                                 @error('nom')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -28,7 +28,7 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label for="reference" class="form-label">Référence</label>
-                                <input type="text" name="reference" class="form-control @error('reference', 'is-invalid')" value="{{ $produit->reference }}">
+                                <input type="text" name="reference" class="form-control @error('reference') is-invalid @enderror" value="{{ $produit->reference }}">
                                 @error('reference')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -40,7 +40,7 @@
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="description" class="form-label">Description *</label>
-                                <textarea name="description" class="form-control @error('description', 'is-invalid')" rows="3" required>{{ $produit->description }}</textarea>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="3" required>{{ $produit->description }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -52,7 +52,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="prix" class="form-label">Prix *</label>
-                                <input type="number" name="prix" class="form-control @error('prix', 'is-invalid')" value="{{ $produit->prix }}" step="0.01" min="0" required>
+                                <input type="number" name="prix" class="form-control @error('prix') is-invalid @enderror" value="{{ $produit->prix }}" step="0.01" min="0" required>
                                 @error('prix')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -62,7 +62,7 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label for="quantite_stock" class="form-label">Quantité en stock *</label>
-                                <input type="number" name="quantite_stock" class="form-control @error('quantite_stock', 'is-invalid')" value="{{ $produit->quantite_stock }}" min="0" required>
+                                <input type="number" name="quantite_stock" class="form-control @error('quantite_stock') is-invalid @enderror" value="{{ $produit->quantite_stock }}" min="0" required>
                                 @error('quantite_stock')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -74,9 +74,15 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="fournisseur_id" class="form-label">Fournisseur *</label>
-                                <select name="fournisseur_id" class="form-control @error('fournisseur_id', 'is-invalid')" required>
+                                <select name="fournisseur_id" class="form-control @error('fournisseur_id') is-invalid @enderror" required>
                                     <option value="">Choisir un fournisseur</option>
-                                    {{-- Ici tu peux ajouter la liste des fournisseurs depuis la base de données --}}
+                                    @if(isset($fournisseurs))
+                                        @foreach($fournisseurs as $fournisseur)
+                                            <option value="{{ $fournisseur->id }}" {{ $produit->fournisseur_id == $fournisseur->id ? 'selected' : '' }}>
+                                                {{ $fournisseur->nom }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 @error('fournisseur_id')
                                     <div class="invalid-feedback">
@@ -87,9 +93,15 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label for="categorie_id" class="form-label">Catégorie</label>
-                                <select name="categorie_id" class="form-control @error('categorie_id', 'is-invalid')">
+                                <select name="categorie_id" class="form-control @error('categorie_id') is-invalid @enderror">
                                     <option value="">Choisir une catégorie</option>
-                                    {{-- Ici tu peux ajouter la liste des catégories depuis la base de données --}}
+                                    @if(isset($categories))
+                                        @foreach($categories as $categorie)
+                                            <option value="{{ $categorie->id }}" {{ $produit->categorie_id == $categorie->id ? 'selected' : '' }}>
+                                                {{ $categorie->nom }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 @error('categorie_id')
                                     <div class="invalid-feedback">
@@ -102,10 +114,9 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="statut" class="form-label">Statut</label>
-                                <select name="statut" class="form-control @error('statut', 'is-invalid')">
-                                    <option value="disponible" {{ $produit->statut == 'disponible' ? 'selected' : '' }}>Disponible</option>
-                                    <option value="indisponible" {{ $produit->statut == 'indisponible' ? 'selected' : '' }}>Indisponible</option>
-                                    <option value="en_rupture" {{ $produit->statut == 'en_rupture' ? 'selected' : '' }}>En rupture</option>
+                                <select name="statut" class="form-control @error('statut') is-invalid @enderror">
+                                    <option value="actif" {{ $produit->statut == 'actif' ? 'selected' : '' }}>Actif</option>
+                                    <option value="inactif" {{ $produit->statut == 'inactif' ? 'selected' : '' }}>Inactif</option>
                                 </select>
                                 @error('statut')
                                     <div class="invalid-feedback">
@@ -116,7 +127,7 @@
                             
                             <div class="col-md-6 mb-3">
                                 <label for="image" class="form-label">Image</label>
-                                <input type="file" name="image" class="form-control @error('image', 'is-invalid')" accept="image/*">
+                                <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
                                 @error('image')
                                     <div class="invalid-feedback">
                                         {{ $message }}

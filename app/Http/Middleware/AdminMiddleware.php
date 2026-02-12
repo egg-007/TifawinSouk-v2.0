@@ -25,7 +25,6 @@ class AdminMiddleware
         // Vérifier si l'utilisateur est administrateur depuis la base de données
         $user = Auth::user();
         
-        // DEBUG: Afficher les informations de l'utilisateur
         // dd([
         //     'user_id' => $user->id,
         //     'user_email' => $user->email,
