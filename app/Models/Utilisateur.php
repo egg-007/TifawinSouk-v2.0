@@ -21,10 +21,7 @@ class Utilisateur extends Authenticatable
         'password', 'remember_token',
     ];
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
+  
     /**
      * Get the full name of the user.
      */
