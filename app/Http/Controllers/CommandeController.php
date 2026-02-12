@@ -76,7 +76,9 @@ class CommandeController extends Controller
 
     public function panier()
     {
+
         $commande = Command::where('utilisateur_id', Auth::id())
+
             ->where('statut', 'en_attente')
             ->with('lignes.produit')
             ->first();
