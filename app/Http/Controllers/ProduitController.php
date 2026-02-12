@@ -77,18 +77,13 @@ class ProduitController extends Controller
             ->with('success', 'Produit supprimé');
     }
 
-    /**
-     * Display products for the shop.
-     */
+
     public function shop()
     {
         $produits = Produit::all();
         return view('shop.boutique', compact('produits'));
     }
 
-    /**
-     * Display boutique page for clients.
-     */
     public function boutique()
     {
         $produits = Produit::all();
