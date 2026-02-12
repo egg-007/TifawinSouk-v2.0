@@ -24,12 +24,10 @@ class CommandeController extends Controller
 
         $produit = Produit::findOrFail($request->produit_id);
         
-        // Vérifier le stock
         if ($produit->quantite_stock < $request->quantite) {
             return back()->with('error', 'Stock insuffisant pour ce produit.');
         }
 
-        // Créer ou récupérer la commande en cours (pending)
         $commande = Command::firstOrCreate(
             [
                 'utilisateur_id' => 1, // ID utilisateur par défaut
@@ -41,14 +39,11 @@ class CommandeController extends Controller
                 'montant_total' => 0
             ]
         );
-
-        // Vérifier si le produit est déjà dans la commande
         $ligneExistante = LigneCommand::where('commande_id', $commande->id)
             ->where('produit_id', $produit->id)
             ->first();
 
         if ($ligneExistante) {
-            // Mettre à jour la quantité
             $nouvelleQuantite = $ligneExistante->quantite + $request->quantite;
             
             if ($produit->quantite_stock < $nouvelleQuantite) {
@@ -60,7 +55,6 @@ class CommandeController extends Controller
                 'prix_total' => $nouvelleQuantite * $ligneExistante->prix_unitaire
             ]);
         } else {
-            // Créer une nouvelle ligne
             LigneCommand::create([
                 'commande_id' => $commande->id,
                 'produit_id' => $produit->id,
@@ -70,7 +64,6 @@ class CommandeController extends Controller
             ]);
         }
 
-        // Recalculer le total de la commande
         $total = LigneCommand::where('commande_id', $commande->id)
             ->sum('prix_total');
         
@@ -84,7 +77,7 @@ class CommandeController extends Controller
      */
     public function panier()
     {
-        $commande = Command::where('utilisateur_id', 1) // ID utilisateur par défaut
+        $commande = Command::where('utilisateur_id', 1)
             ->where('statut', 'en_attente')
             ->with('lignes.produit')
             ->first();
@@ -112,11 +105,9 @@ class CommandeController extends Controller
                         throw new \Exception("Stock insuffisant pour: {$produit->nom}");
                     }
 
-                    // Diminuer le stock
                     $produit->decrement('quantite_stock', $ligne->quantite);
                 }
 
-                // Marquer la commande comme payée
                 $commande->update([
                     'statut' => 'confirmee'
                 ]);
