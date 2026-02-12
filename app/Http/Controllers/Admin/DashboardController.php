@@ -7,6 +7,7 @@ use App\Models\Utilisateur;
 use App\Models\Categorie;
 use App\Models\Produit;
 use App\Models\Command;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {

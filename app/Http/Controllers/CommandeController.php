@@ -24,15 +24,13 @@ class CommandeController extends Controller
 
         $produit = Produit::findOrFail($request->produit_id);
         
-        // Vérifier le stock
         if ($produit->quantite_stock < $request->quantite) {
             return back()->with('error', 'Stock insuffisant pour ce produit.');
         }
 
-        // Créer ou récupérer la commande en cours (pending)
         $commande = Command::firstOrCreate(
             [
-                'utilisateur_id' => 1, // ID utilisateur par défaut
+                'utilisateur_id' => Auth::id(),
                 'statut' => 'en_attente'
             ],
             [
@@ -42,13 +40,11 @@ class CommandeController extends Controller
             ]
         );
 
-        // Vérifier si le produit est déjà dans la commande
         $ligneExistante = LigneCommand::where('commande_id', $commande->id)
             ->where('produit_id', $produit->id)
             ->first();
 
         if ($ligneExistante) {
-            // Mettre à jour la quantité
             $nouvelleQuantite = $ligneExistante->quantite + $request->quantite;
             
             if ($produit->quantite_stock < $nouvelleQuantite) {
@@ -60,7 +56,6 @@ class CommandeController extends Controller
                 'prix_total' => $nouvelleQuantite * $ligneExistante->prix_unitaire
             ]);
         } else {
-            // Créer une nouvelle ligne
             LigneCommand::create([
                 'commande_id' => $commande->id,
                 'produit_id' => $produit->id,
@@ -70,7 +65,6 @@ class CommandeController extends Controller
             ]);
         }
 
-        // Recalculer le total de la commande
         $total = LigneCommand::where('commande_id', $commande->id)
             ->sum('prix_total');
         
@@ -79,12 +73,10 @@ class CommandeController extends Controller
         return back()->with('success', 'Produit ajouté au panier avec succès!');
     }
 
-    /**
-     * Afficher le panier
-     */
+
     public function panier()
     {
-        $commande = Command::where('utilisateur_id', 1) // ID utilisateur par défaut
+        $commande = Command::where('utilisateur_id', Auth::id())
             ->where('statut', 'en_attente')
             ->with('lignes.produit')
             ->first();
@@ -92,9 +84,7 @@ class CommandeController extends Controller
         return view('shop.panier', compact('commande'));
     }
 
-    /**
-     * Payer la commande
-     */
+   
     public function payer($id)
     {
         $commande = Command::with('lignes.produit')->findOrFail($id);
@@ -112,11 +102,9 @@ class CommandeController extends Controller
                         throw new \Exception("Stock insuffisant pour: {$produit->nom}");
                     }
 
-                    // Diminuer le stock
                     $produit->decrement('quantite_stock', $ligne->quantite);
                 }
 
-                // Marquer la commande comme payée
                 $commande->update([
                     'statut' => 'confirmee'
                 ]);
@@ -130,9 +118,7 @@ class CommandeController extends Controller
         }
     }
 
-    /**
-     * Afficher les commandes du client connecté
-     */
+  
     public function mesCommandes()
     {
         $commandes = Command::where('utilisateur_id', Auth::id())

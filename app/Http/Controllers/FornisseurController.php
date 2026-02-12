@@ -13,17 +13,13 @@ class FornisseurController extends Controller
         return view('fornisseur.index',compact($fornisseur));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+   
     public function create()
     {
         return view('fornisseur.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+   
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -42,9 +38,6 @@ class FornisseurController extends Controller
         return redirect()->route('fornisseur.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
         $fornisseur = fornisseur::find($id);
@@ -52,9 +45,7 @@ class FornisseurController extends Controller
         
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    
     public function edit(Fornisseur $fornisseur)
     {
         return view('fornisseur.edit', [
@@ -62,9 +53,6 @@ class FornisseurController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Fornisseur $fornisseur)
     {
         $validated = $request->validate([
@@ -83,9 +71,6 @@ class FornisseurController extends Controller
         return redirect()->route('fornisseur.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Fornisseur $fornisseur)
     {
         $fornisseur->delete();
